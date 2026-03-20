@@ -1,0 +1,20 @@
+{
+  "name": "google-docs-vector-search",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "ingest": "bun run src/ingest.ts",
+    "search": "bun run src/search.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
+    "@tobilu/qmd": "^2.0.1",
+    "googleapis": "^171.4.0"
+  }
+}
