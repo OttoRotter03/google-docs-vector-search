@@ -4,7 +4,8 @@
   "scripts": {
     "setup": "tsx src/setup.ts",
     "ingest": "tsx src/ingest.ts",
-    "search": "tsx src/search.ts"
+    "search": "tsx src/search.ts",
+    "search:explain": "tsx src/search.ts --explain"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
