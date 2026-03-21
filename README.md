@@ -15,7 +15,7 @@ This tool fixes that. It pulls all your Google Docs, converts them to Markdown, 
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) runtime
+- [Node.js](https://nodejs.org) v20+ runtime (v22 recommended; see `.nvmrc`)
 - Google Cloud OAuth credentials (see below)
 
 ### Getting Your Google Credentials
@@ -46,17 +46,17 @@ You need a `credentials.json` file from Google Cloud Console. Here's how to get 
 
 ```bash
 # Install dependencies
-bun install
+npm install
 ```
 
 ### Usage
 
 ```bash
 # Step 1: Ingest all your Google Docs (run this first, and again whenever you want to re-sync)
-bun run ingest
+npm run ingest
 
 # Step 2: Search your docs
-bun run search "quarterly budget breakdown"
+npm run search "quarterly budget breakdown"
 ```
 
 On first run, a browser window will open for Google authentication. Your token is cached locally so you won't need to log in again.
@@ -79,6 +79,6 @@ All of these are gitignored.
 
 ## Tech Stack
 
-- **Bun** + **TypeScript** — fast runtime with type safety
+- **Node.js** + **TypeScript** — reliable runtime with type safety
 - **Google APIs** (`googleapis`) — read-only access to Drive and Docs
 - **qmd** (`@tobilu/qmd`) — vector embeddings, indexing, and hybrid search over Markdown

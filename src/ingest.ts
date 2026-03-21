@@ -1,11 +1,13 @@
 import { fetchAllGoogleDocs } from "./google.ts";
 import { createStore } from "@tobilu/qmd";
 import { readConfig } from "./config.ts";
-import { mkdirSync, writeFileSync } from "fs";
-import path from "path";
+import { mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DOCS_DIR = path.join(import.meta.dir, "..", "docs");
-const DB_PATH = path.join(import.meta.dir, "..", "qmd.db");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DOCS_DIR = path.join(__dirname, "..", "docs");
+const DB_PATH = path.join(__dirname, "..", "qmd.db");
 
 async function main() {
   const config = readConfig();
@@ -67,7 +69,7 @@ async function main() {
   }
 
   await store.close();
-  console.log('\nDone! Run `bun run search "your query"` to search your docs.');
+  console.log('\nDone! Run `npm run search "your query"` to search your docs.');
 }
 
 main().catch(console.error);

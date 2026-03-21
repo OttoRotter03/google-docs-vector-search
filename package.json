@@ -1,16 +1,14 @@
 {
   "name": "google-docs-vector-search",
-  "module": "index.ts",
   "type": "module",
   "scripts": {
-    "setup": "bun run src/setup.ts",
-    "ingest": "bun run src/ingest.ts",
-    "search": "bun run src/search.ts"
+    "setup": "tsx src/setup.ts",
+    "ingest": "tsx src/ingest.ts",
+    "search": "tsx src/search.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
     "typescript": "^5.0.0"
   },
   "dependencies": {
