@@ -3,6 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
+    "setup": "bun run src/setup.ts",
     "ingest": "bun run src/ingest.ts",
     "search": "bun run src/search.ts"
   },
