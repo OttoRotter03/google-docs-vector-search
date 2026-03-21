@@ -11,48 +11,38 @@ async function main() {
     process.exit(1);
   }
 
-  const config = readConfig();
+  const { searchMode } = readConfig();
   const store = await createStore({ dbPath: DB_PATH });
 
   try {
-    if (config.searchMode === "keyword") {
-      const results = await store.searchLex(query, { limit: 5 });
+    // Each mode returns different shapes — normalize to { file, score, snippet }
+    const results =
+      searchMode === "keyword"
+        ? (await store.searchLex(query, { limit: 5 })).map((r) => ({
+            file: r.filepath,
+            score: r.score,
+            snippet: r.body?.slice(0, 300) ?? "(no body)",
+          }))
+        : searchMode === "semantic"
+          ? (await store.searchVector(query, { limit: 5 })).map((r) => ({
+              file: r.filepath,
+              score: r.score,
+              snippet: r.body?.slice(0, 300) ?? "(no body)",
+            }))
+          : (await store.search({ query, limit: 5 })).map((r) => ({
+              file: r.file,
+              score: r.score,
+              snippet: r.bestChunk.slice(0, 300),
+            }));
 
-      if (results.length === 0) {
-        console.log("No results found.");
-      } else {
-        console.log(`Found ${results.length} results for "${query}":\n`);
-        for (const result of results) {
-          console.log(`--- ${result.filepath} (score: ${result.score.toFixed(3)}) ---`);
-          console.log(result.body?.slice(0, 300) || "(no body)");
-          console.log();
-        }
-      }
-    } else if (config.searchMode === "semantic") {
-      const results = await store.searchVector(query, { limit: 5 });
-
-      if (results.length === 0) {
-        console.log("No results found.");
-      } else {
-        console.log(`Found ${results.length} results for "${query}":\n`);
-        for (const result of results) {
-          console.log(`--- ${result.filepath} (score: ${result.score.toFixed(3)}) ---`);
-          console.log(result.body?.slice(0, 300) || "(no body)");
-          console.log();
-        }
-      }
+    if (results.length === 0) {
+      console.log("No results found.");
     } else {
-      const results = await store.search({ query, limit: 5 });
-
-      if (results.length === 0) {
-        console.log("No results found.");
-      } else {
-        console.log(`Found ${results.length} results for "${query}":\n`);
-        for (const result of results) {
-          console.log(`--- ${result.file} (score: ${result.score.toFixed(3)}) ---`);
-          console.log(result.bestChunk.slice(0, 300));
-          console.log();
-        }
+      console.log(`Found ${results.length} results for "${query}":\n`);
+      for (const { file, score, snippet } of results) {
+        console.log(`--- ${file} (score: ${score.toFixed(3)}) ---`);
+        console.log(snippet);
+        console.log();
       }
     }
   } finally {
