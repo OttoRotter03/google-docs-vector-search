@@ -56,7 +56,7 @@ Choose your search mode:
   // Download models via qmd CLI if needed
   if (mode !== "keyword") {
     console.log("\nDownloading required models (this may take a few minutes)...\n");
-    await $`npx qmd pull`.quiet();
+    await $`npx qmd pull`
     console.log("Models downloaded.");
   }
 
