@@ -71,6 +71,7 @@ async function main() {
     } else {
       console.log(`Found ${results.length} results for "${query}":\n`);
       for (const r of results) {
+        console.log('----------------------------------------------------------------------------')
         console.log(`--- ${r.file} (score: ${r.score.toFixed(3)}) ---`);
         if (r.explain) {
           const e = r.explain;
