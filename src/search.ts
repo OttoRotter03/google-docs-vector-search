@@ -1,13 +1,15 @@
 import { createStore } from "@tobilu/qmd";
 import { readConfig } from "./config.ts";
-import path from "path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DB_PATH = path.join(import.meta.dir, "..", "qmd.db");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DB_PATH = path.join(__dirname, "..", "qmd.db");
 
 async function main() {
   const query = process.argv.slice(2).join(" ");
   if (!query) {
-    console.error('Usage: bun run search "your query"');
+    console.error('Usage: npm run search "your query"');
     process.exit(1);
   }
 

@@ -1,5 +1,5 @@
 import { writeConfig, type SearchMode } from "./config.ts";
-import { $ } from "bun";
+import { execSync } from "node:child_process";
 
 function prompt(question: string): Promise<string> {
   process.stdout.write(question);
@@ -56,14 +56,14 @@ Choose your search mode:
   // Download models via qmd CLI if needed
   if (mode !== "keyword") {
     console.log("\nDownloading required models (this may take a few minutes)...\n");
-    await $`npx qmd pull`
+    execSync("npx qmd pull", { stdio: "inherit" });
     console.log("Models downloaded.");
   }
 
   console.log("\nSetup complete! Next steps:");
   console.log("  1. Place your credentials.json in the project root");
-  console.log("  2. Run `bun run ingest` to fetch and index your Google Docs");
-  console.log('  3. Run `bun run search "your query"` to search');
+  console.log("  2. Run `npm run ingest` to fetch and index your Google Docs");
+  console.log('  3. Run `npm run search "your query"` to search');
 }
 
 main().catch(console.error);

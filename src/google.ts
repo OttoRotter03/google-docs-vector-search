@@ -1,15 +1,17 @@
 import { google } from "googleapis";
 import { authenticate } from "@google-cloud/local-auth";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import path from "path";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SCOPES = [
   "https://www.googleapis.com/auth/drive.readonly",
   "https://www.googleapis.com/auth/documents.readonly",
 ];
 
-const TOKEN_PATH = path.join(import.meta.dir, "..", "token.json");
-const CREDENTIALS_PATH = path.join(import.meta.dir, "..", "credentials.json");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const TOKEN_PATH = path.join(__dirname, "..", "token.json");
+const CREDENTIALS_PATH = path.join(__dirname, "..", "credentials.json");
 
 async function getAuthClient() {
   // Try loading saved token first
