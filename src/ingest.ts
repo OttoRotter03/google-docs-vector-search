@@ -1,5 +1,6 @@
 import { fetchAllGoogleDocs } from "./google.ts";
 import { createStore } from "@tobilu/qmd";
+import { readConfig } from "./config.ts";
 import { mkdirSync, writeFileSync } from "fs";
 import path from "path";
 
@@ -7,6 +8,8 @@ const DOCS_DIR = path.join(import.meta.dir, "..", "docs");
 const DB_PATH = path.join(import.meta.dir, "..", "qmd.db");
 
 async function main() {
+  const config = readConfig();
+
   // 1. Fetch all Google Docs
   const googleDocs = await fetchAllGoogleDocs();
 
@@ -48,19 +51,23 @@ async function main() {
     `Indexed: ${updateResult.indexed} new, ${updateResult.updated} updated, ${updateResult.removed} removed`
   );
 
-  // 4. Generate embeddings
-  console.log("\nGenerating embeddings (this may take a while on first run)...");
-  const embedResult = await store.embed({
-    onProgress: ({ chunksEmbedded, totalChunks }) => {
-      if (chunksEmbedded % 10 === 0 || chunksEmbedded === totalChunks) {
-        console.log(`  Embedded ${chunksEmbedded}/${totalChunks} chunks`);
-      }
-    },
-  });
-  console.log("Embedding complete.");
+  // 4. Generate embeddings (only if semantic or full mode)
+  if (config.searchMode !== "keyword") {
+    console.log("\nGenerating embeddings (this may take a while on first run)...");
+    const embedResult = await store.embed({
+      onProgress: ({ chunksEmbedded, totalChunks }) => {
+        if (chunksEmbedded % 10 === 0 || chunksEmbedded === totalChunks) {
+          console.log(`  Embedded ${chunksEmbedded}/${totalChunks} chunks`);
+        }
+      },
+    });
+    console.log("Embedding complete.");
+  } else {
+    console.log("\nSkipping embeddings (keyword-only mode).");
+  }
 
   await store.close();
-  console.log("\nDone! Run `bun run search` to search your docs.");
+  console.log('\nDone! Run `bun run search "your query"` to search your docs.');
 }
 
 main().catch(console.error);

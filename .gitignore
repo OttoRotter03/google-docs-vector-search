@@ -143,3 +143,4 @@ docs/
 qmd.db
 token.json
 credentials.json
+config.json
